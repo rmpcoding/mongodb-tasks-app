@@ -13,6 +13,8 @@ MongoClient.connect(
 
         const db = client.db(databaseName);
 
+        // INSERT METHODS FOR MONGODB
+        // ========================================
         // db.collection('users').insertOne({
         //   name: 'Robert',
         //   age: 31
@@ -39,6 +41,8 @@ MongoClient.connect(
         //   console.table(result.ops);
         // })
 
+        // FIND METHODS FOR MONGODB
+        // ========================================
         // db.collection('users').findOne({ _id: new ObjectID("5f6aca0fc420c4185be56b54") }, (error, result) => {
         //     if (error) throw error;
 
@@ -59,5 +63,50 @@ MongoClient.connect(
         //   if (error) throw error;
         //   console.log(results)
         // })
+
+        // UPDATE METHODS FOR MONGODB
+        // ========================================
+        // db.collection('users').updateOne({
+        //   _id: new ObjectID("5f6aa9abc6be1a14e3ff7e10")
+        // }, {
+        //   $set: {
+        //     name: 'Oliver'
+        //   }
+        // }).then((result) => {
+        //     console.log(result)
+        // }).catch((error) => {
+        //     console.log(error)
+        // })
+
+        // db.collection('tasks')
+        //     .updateMany(
+        //         {
+        //             completed: false,
+        //         },
+        //         {
+        //             $set: {
+        //                 completed: true,
+        //             },
+        //         }
+        //     )
+        //     .then((result) => {
+        //         console.log(result);
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+
+
+        // DELETE METHOD FOR MONGODB
+        // ========================================
+        // db.collection('tasks').deleteOne({
+        //     description: "Go out for a run"
+        // }).then((result) => {
+        //     console.log(result);
+        // }).catch((error) => {
+        //     console.log(error);
+        // })
+
+        // END CONNECTION; DO NOT DELETE BELOW THIS
     }
 );
