@@ -41,14 +41,13 @@ app.get('/tasks', (req, res) => {
 
 app.get('/tasks/:id', (req, res) => {
     const _id = req.params.id;
-    console.log(_id)
 
     Task.findById(_id)
-        .then((user) => {
-            if (!user) {
+        .then((task) => {
+            if (!task) {
                 return res.status(404).send();
             }
-            res.send(user);
+            res.send(task);
         })
         .catch((err) => {
             res.status(500).send();
