@@ -32,22 +32,3 @@ const User = mongoose.model('User', {
 });
 
 module.exports = User
-
-/* ------------------------------ USERS Object ------------------------------ */
-
-// const me = new User({
-//     name: 'Robert',
-//     age: 31,
-//     email: 'everyone@wemail.com',
-//     password: 'pAssWord',
-// });
-
-/* ---------------------------- USERS Connection ---------------------------- */
-
-// me.save()
-//     .then((result) => {
-//         console.log(result);
-//     })
-//     .catch((error) => {
-//         console.log(error);
-//     });
