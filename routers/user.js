@@ -48,7 +48,7 @@ router.get('/users', async (req, res) => {
         const users = await User.find({});
         res.send(users);
     } catch {
-        res.status(500).send(err);
+        res.status(500).send();
     }
 });
 
