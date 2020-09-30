@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 
 /* ---------------------------------- POST ---------------------------------- */
 
@@ -41,15 +42,31 @@ router.post('/users/login', async (req, res) => {
     }
 });
 
-/* ---------------------------------- READ ---------------------------------- */
+/* --------------------------------- LOGOUT --------------------------------- */
 
-router.get('/users', async (req, res) => {
+router.post('/users/logout', auth, async (req, res) => {
+    const user = req.user;
+
+    
     try {
-        const users = await User.find({});
-        res.send(users);
-    } catch {
+        user.tokens = user.tokens.filter((token) => {
+            return token.token !== req.token;
+        });
+
+        await user.save();
+
+        res.send();
+    } catch (err) {
         res.status(500).send();
     }
+});
+
+/* ---------------------------------- READ ---------------------------------- */
+
+router.get('/users/me', auth, async (req, res) => {
+    user = req.user;
+
+    res.send(user);
 });
 
 /* ---------------------------------- READ ID ------------------------------- */
