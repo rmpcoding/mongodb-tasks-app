@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { update } = require('../models/User');
 
 /* ---------------------------------- POST ---------------------------------- */
 
@@ -47,7 +48,6 @@ router.post('/users/login', async (req, res) => {
 router.post('/users/logout', auth, async (req, res) => {
     const user = req.user;
 
-    
     try {
         user.tokens = user.tokens.filter((token) => {
             return token.token !== req.token;
@@ -65,7 +65,7 @@ router.post('/users/logout', auth, async (req, res) => {
 
 router.post('/users/logoutAll', auth, async (req, res) => {
     const user = req.user;
-    
+
     try {
         user.tokens = [];
 
@@ -87,8 +87,8 @@ router.get('/users/me', auth, async (req, res) => {
 
 /* --------------------------------- UPDATE --------------------------------- */
 
-router.patch('/users/:id', async (req, res) => {
-    const _id = req.params.id;
+router.patch('/users/me', auth, async (req, res) => {
+    const user = req.user;
     const updatedUser = req.body;
 
     const updates = Object.keys(updatedUser);
@@ -103,14 +103,10 @@ router.patch('/users/:id', async (req, res) => {
     }
 
     try {
-        const user = await User.findById(_id);
-
         updates.forEach((update) => (user[update] = updatedUser[update]));
+
         await user.save();
 
-        if (!user) {
-            return res.status(404).send();
-        }
         res.send(user);
     } catch (err) {
         res.status(400).send(err);
@@ -119,14 +115,12 @@ router.patch('/users/:id', async (req, res) => {
 
 /* --------------------------------- DELETE --------------------------------- */
 
-router.delete('/users/:id', async (req, res) => {
-    const _id = req.params.id;
+router.delete('/users/me', auth, async (req, res) => {
+    const user = req.user;
+    const _id = user._id;
 
     try {
-        const user = await User.findByIdAndDelete(_id);
-        if (!user) {
-            return res.status(404).send();
-        }
+        await user.remove();
         res.send(user);
     } catch (err) {
         res.status(404).send(err);
