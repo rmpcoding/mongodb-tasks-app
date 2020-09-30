@@ -61,7 +61,7 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 });
 
-/* --------------------------------- LOGOUT --------------------------------- */
+/* --------------------------------- LOGOUT ALL ----------------------------- */
 
 router.post('/users/logoutAll', auth, async (req, res) => {
     const user = req.user;
@@ -83,23 +83,6 @@ router.get('/users/me', auth, async (req, res) => {
     user = req.user;
 
     res.send(user);
-});
-
-/* ---------------------------------- READ ID ------------------------------- */
-
-router.get('/users/:id', async (req, res) => {
-    const _id = req.params.id;
-
-    try {
-        const user = await User.findById(_id);
-
-        if (!user) {
-            return res.status(404).send();
-        }
-        res.send(user);
-    } catch (err) {
-        res.status(500).send();
-    }
 });
 
 /* --------------------------------- UPDATE --------------------------------- */
