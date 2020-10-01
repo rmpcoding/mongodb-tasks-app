@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const auth = require('../middleware/auth');
-const { update } = require('../models/User');
+// const { update } = require('../models/User');
 
 /* ---------------------------------- POST ---------------------------------- */
 
