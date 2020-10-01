@@ -23,9 +23,11 @@ router.post('/tasks', auth, async (req, res) => {
 
 /* ---------------------------------- READ ---------------------------------- */
 
-router.get('/tasks', async (req, res) => {
+router.get('/tasks', auth, async (req, res) => {
+    const user = req.user;
+
     try {
-        const tasks = await Task.find({});
+        const tasks = await Task.find({ owner: user._id});
         res.send(tasks);
     } catch {
         res.status(500).send(err);
@@ -34,15 +36,20 @@ router.get('/tasks', async (req, res) => {
 
 /* ---------------------------------- READ ID ------------------------------- */
 
-router.get('/tasks/:id', async (req, res) => {
+router.get('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id;
+    const user = req.user;
 
     try {
-        const task = await Task.findById(_id);
+        const task = await Task.findOne({ 
+            _id,
+            owner: user._id
+        });
 
         if (!task) {
             return res.status(404).send();
         }
+
         res.send(task);
     } catch (err) {
         res.status(500).send();
@@ -51,9 +58,10 @@ router.get('/tasks/:id', async (req, res) => {
 
 /* --------------------------------- UPDATE --------------------------------- */
 
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id;
     const updatedTask = req.body;
+    const user = req.user;
 
     const updates = Object.keys(updatedTask);
     const allowedUpdates = ['completed', 'description'];
@@ -66,15 +74,21 @@ router.patch('/tasks/:id', async (req, res) => {
         return res.status(400).send({ error: 'Invalid updates!' });
     }
 
-    try {
-        const task = await Task.findById(_id);
+    
 
-        updates.forEach((update) => (task[update] = updatedTask[update]));
-        await task.save();
+    try {
+        const task = await Task.findOne({
+            _id,
+            owner: user._id
+        });
 
         if (!task) {
             return res.status(404).send();
         }
+
+        updates.forEach((update) => (task[update] = updatedTask[update]));
+        await task.save();
+
         res.send(task);
     } catch (err) {
         res.status(400).send(err);
